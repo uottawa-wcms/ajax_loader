@@ -1,0 +1,41 @@
+<?php
+
+function ajax_loader_generate($function, $params) {
+  $params_enc = base64_encode(serialize($params));
+  $id = str_replace(".", "-", uniqid('ajax-load-target-', TRUE));
+  $html = '<div id="' . $id . '"></div>';
+  drupal_add_js(drupal_get_path('module', 'ajax_loader') . '/ajax_loader.js');
+  $js = 'jQuery(document).ready(function() { ajaxLoaderCall("'.url('system/ajax_loader').'", "'.$id.'", "'.$function.'", "'.$params_enc.'"); });';
+  drupal_add_js($js, array(
+    'type' => 'inline'
+  ));
+  return $html;
+}
+
+function ajax_loader_callback() {
+  $GLOBALS['devel_shutdown'] = FALSE;
+  if (isset($_GET['c'])) {
+    $callback = $_GET['c'];
+    if (function_exists($callback)) {
+      $arguments = array();
+      if (isset($_GET['a'])) {
+        $arguments = unserialize(base64_decode($_GET['a']));
+      }
+      print call_user_func_array($callback, $arguments);
+      die();
+    }
+  }
+  print 'false';
+  die();
+}
+
+function ajax_loader_menu() {
+  return array(
+    'system/ajax_loader' => array(
+      'title' => 'AJAX Callback',
+      'page callback' => 'ajax_loader_callback',
+      'access callback' => TRUE,
+      'type' => MENU_CALLBACK,
+    )
+  );
+}

@@ -1,0 +1,4 @@
+core = 7.x
+name = AJAX Loader
+description = Provides an API for requesting content via AJAX.
+package = WebCMS Tools
