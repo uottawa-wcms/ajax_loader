@@ -5,7 +5,7 @@ function ajaxLoaderCall(basePath, id, function_name, arguments) {
     c: function_name,
     a: arguments
   };
-  jQuery('#' + id).html('Loading... <div class="throbber"></div>').addClass("ajax-progress");
+  jQuery('#' + id).html('<p style="text-align: center; margin-top: 10px; font-size: 10px;">Loading...<span style="background-image: url(\''+Drupal.settings.basePath + 'misc/throbber.gif\'); background-position: 0px -12px; background-repeat: no-repeat; width: 25px; height: 25px; display: inline-block; margin-top: -7px; margin-left: 6px;"></span>');
   jQuery.ajax({
     cache: true,
     success: function(data) {
